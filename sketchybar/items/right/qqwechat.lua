@@ -32,7 +32,7 @@ local qq = sbar.add("item", "qq", {
 
 -- 通用订阅更新函数
 local function subscribe_app_label(item, app_keyword)
-  item:subscribe({ "forced", "routine" }, function()
+  item:subscribe({ "forced", "routine", "system_woke" }, function()
     local script = string.format([[
       lsappinfo -all list | grep %s | 
       egrep -o "\"StatusLabel\"=\{ \"label\"=\"?(.*?)\"? \}" | 
@@ -49,6 +49,8 @@ end
 -- 启动状态更新订阅
 subscribe_app_label(wechat, "WeChat")
 subscribe_app_label(qq, "QQ")
+
+
 
 sbar.add("item", { 
   icon = {

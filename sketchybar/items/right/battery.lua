@@ -7,18 +7,6 @@ local function with_leading_zero(n)
   return (n < 10 and "0" or "") .. n
 end
 
--- 工具函数：显示 label 后延迟隐藏
-local function show_label_temporarily(item, label_text)
-  sbar.animate("tanh", 20, function()
-    item:set({ label = { string = label_text, width = "dynamic" } })
-  end)
-  sbar.delay(2, function()
-    sbar.animate("tanh", 20, function()
-      item:set({ label = { width = 0 } })
-    end)
-  end)
-end
-
 -- 电池图标和颜色选择逻辑
 local function get_battery_icon_and_color(charge, charging)
   if charging then
@@ -40,12 +28,13 @@ local battery = sbar.add("item", "battery", {
   icon = { padding_left = 0 },
   label = { width = 0, padding_left = 0 },
   position = "right",
+  update_freq = 180,
   click_script = "open -a 'AlDente'",
   background = { color = colors.transparent, border_width = 0 }
 })
 
 -- 电量更新逻辑
-battery:subscribe({ "power_source_change", "system_woke" }, function()
+battery:subscribe({"routine", "power_source_change", "system_woke" }, function()
   sbar.exec("pmset -g batt", function(batt_info)
     local _, _, charge_str = batt_info:find("(%d+)%%")
     local charge = tonumber(charge_str or "0")
@@ -56,10 +45,19 @@ battery:subscribe({ "power_source_change", "system_woke" }, function()
       icon = {
         string = icon,
         color = color
-      }
+      },
+      label = { string = with_leading_zero(charge) .. "%" },
     })
 
-    show_label_temporarily(battery, with_leading_zero(charge) .. "%")
+    sbar.animate("tanh", 20, function()
+      battery:set({ label = { width = "dynamic" } })
+    end)
+    sbar.delay(2, function()
+      sbar.animate("tanh", 20, function()
+        battery:set({ label = { width = 0 } })
+      end)
+    end)
+
   end)
 end)
 

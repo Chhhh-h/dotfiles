@@ -28,7 +28,7 @@ local cal = sbar.add("item", "cal",{
 
 cal:subscribe({ "forced", "routine", "system_woke" }, function(env)
   cal:set({ icon = os.date("%a %b.%d"), label = os.date("%H:%M") })
-  sbar.exec("~/miniconda3/bin/python3 ~/.config/sketchybar/scripts/holiday.py", function(output)
+  sbar.exec("/opt/miniconda3/bin/python3 ~/.config/sketchybar/scripts/holiday.py", function(output)
     if output and output ~= "" then
       holiday:set({ icon = output })
       cal:set({ 

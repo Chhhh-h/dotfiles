@@ -7,18 +7,6 @@ local function with_leading_zero(n)
   return (n < 10 and "0" or "") .. n
 end
 
--- 工具函数：显示 label 后延迟隐藏
-local function show_label_temporarily(item, label_text)
-  sbar.animate("tanh", 20, function()
-    item:set({ label = { string = label_text, width = "dynamic" } })
-  end)
-  sbar.delay(2, function()
-    sbar.animate("tanh", 20, function()
-      item:set({ label = { width = 0 } })
-    end)
-  end)
-end
-
 -- 音量图标选择逻辑
 local function get_volume_icon(percent)
   if percent > 60 then return icons.volume._100
@@ -41,10 +29,19 @@ volume:subscribe({ "volume_change", "system_woke" }, function(env)
   local percent = tonumber(env.INFO)
   local icon = get_volume_icon(percent)
   volume:set({
-    icon = { string = icon }
+    icon = { string = icon },
+    label = { string = with_leading_zero(percent) .. "%" },
   })
 
-  show_label_temporarily(volume, with_leading_zero(percent) .. "%")
+  sbar.animate("tanh", 20, function()
+    volume:set({ label = { width = "dynamic" } })
+  end)
+  sbar.delay(2, function()
+    sbar.animate("tanh", 20, function()
+      volume:set({ label = { width = 0 } })
+    end)
+  end)
+
 end)
 
 volume:subscribe("mouse.entered", function(env)

@@ -29,7 +29,7 @@ local weather = sbar.add("item", "weather", {
     padding_left = 5,
   },
   position = "right",
-  update_freq = 1800,
+  update_freq = 180,
   click_script = "open -a 'Weather'",
   background = {color = colors.transparent, border_width = 0 }
 })
@@ -38,8 +38,6 @@ local weather = sbar.add("item", "weather", {
 weather:subscribe({ "forced", "routine", "system_woke" }, function(env)
   sbar.exec([[
     bash -c '
-      export PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin
-      export LANG=en_US.UTF-8
       city=$(curl -s "wttr.in/?format=j1" | jq -r ".nearest_area[0].areaName[0].value")
       weather=$(curl -s "wttr.in/?format=%C+%t")
       moon=$(curl -s "wttr.in/?format=j1" | jq -r ".weather[0].astronomy[0].moon_phase")

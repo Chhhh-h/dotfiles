@@ -3,16 +3,16 @@ local colors = require("colors")
 local settings = require("settings")
 
 -- 添加WIFI
-local wifi = sbar.add("item", "wifi", {
+local inputsource = sbar.add("item", "inputsource", {
   position = "right",
   icon = { padding_left = 0 },
   label = { width = 0, padding_left = 0 },
-  click_script = "open 'x-apple.systempreferences:com.apple.preference.network?Wi-Fi'",
+  click_script="osascript -e 'tell application \"System Events\" to keystroke \" \" using {control down, option down}'",
   background = {color = colors.transparent, border_width = 0 }
 })
 
 
-wifi:subscribe({ "wifi_change", "system_woke" }, function(env)
+wifi:subscribe({ "forced", "system_woke" }, function(env)
   sbar.exec([[
     bash -c '
       ip=$(ipconfig getifaddr en0)

@@ -21,13 +21,13 @@ local icons = {
     },
     moon = {
       newmoon="􀡌",
-      waxingcresent="􀡍", 
+      waxingcrescent="􀡍", 
       firstquarter="􀡎",
       waxinggibbous="􀡏",
       fullmoon="􀡈",
       waninggibbous="􀡉",
       lastquarter="􀡊",
-      waningcresent="􀡋",
+      waningcrescent="􀡋",
     },
     switch = {
       on = "􀆊",
